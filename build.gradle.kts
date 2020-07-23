@@ -4,6 +4,7 @@ val kotlin_serialization_version: String by project
 val exposed_version: String by project
 val mysql_connector_version: String by project
 val logback_version: String by project
+val kodein_version: String by project
 
 plugins {
     application
