@@ -1,46 +1,69 @@
 package com.playground.ktor.data.source
 
-import com.playground.ktor.DatabaseSettings
 import com.playground.ktor.data.repository.EmployeeRepository
-import com.playground.ktor.models.Employee
-import com.playground.ktor.models.EmployeeTable
-import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.insertAndGetId
+import com.playground.ktor.models.employee.Employee
+import com.playground.ktor.models.employee.EmployeeTable
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class EmployeeDataSource : EmployeeRepository() {
 
     override suspend fun getAllEmployee(): List<Employee> {
-        val employee = listOf(
-            Employee(1, "Ahmad", "085697855", "Jl.Maskumamnbang"),
-            Employee(2, "Salih", "085697855", "Jl.Kertadara"),
-            Employee(1, "Solih", "085697855", "Jl.Kertawijaya"),
-            Employee(1, "Memet", "085697855", "Jl.Darmajaya")
-        )
+        val employee = mutableListOf<Employee>()
+        transaction {
+            EmployeeTable.selectAll().forEach {
+                employee.add(
+                    Employee(
+                        id = it[EmployeeTable.id].value,
+                        name = it[EmployeeTable.name],
+                        phone = it[EmployeeTable.phone],
+                        address = it[EmployeeTable.address]
+                ))
+            }
+        }
         return employee
     }
 
-    override suspend fun getSingleEmployee() {
-        TODO("Not yet implemented")
+    override suspend fun getSingleEmployee(employeeId: Int): Employee {
+        val employee = Employee(null, "", "", "")
+        transaction {
+            EmployeeTable.select { EmployeeTable.id.eq(employeeId) }.forEach {
+                employee.id = it[EmployeeTable.id].value
+                employee.name = it[EmployeeTable.name]
+                employee.phone = it[EmployeeTable.phone]
+                employee.address = it[EmployeeTable.address]
+            }
+        }
+        return employee
     }
 
-    override suspend fun postEmployee(name: String, phone: String, address: String) {
+    override suspend fun postEmployee(name: String, phone: String, address: String): Int? {
+        var currentId: Int? = null
         transaction {
-            EmployeeTable.insertAndGetId{
+            val request = EmployeeTable.insertAndGetId{
+                it[EmployeeTable.name] = name
+                it[EmployeeTable.phone] = phone
+                it[EmployeeTable.address] = address
+            }
+            currentId = request.value
+        }
+        return currentId
+    }
+    override suspend fun updateEmployee(id: Int, name: String, phone: String, address: String) {
+        transaction {
+            EmployeeTable.update({EmployeeTable.id.eq(id)}) {
                 it[EmployeeTable.name] = name
                 it[EmployeeTable.phone] = phone
                 it[EmployeeTable.address] = address
             }
         }
     }
-    override suspend fun updateEmployee() {
-        TODO("Not yet implemented")
-    }
 
-    override suspend fun deleteEmployee() {
-        TODO("Not yet implemented")
+    override suspend fun deleteEmployee(id: Int) {
+        transaction {
+            EmployeeTable.deleteWhere{
+                EmployeeTable.id.eq(id)
+            }
+        }
     }
 }

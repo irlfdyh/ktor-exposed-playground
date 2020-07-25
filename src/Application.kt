@@ -1,7 +1,7 @@
 package com.playground.ktor
 
 import com.playground.ktor.data.source.EmployeeDataSource
-import com.playground.ktor.models.EmployeeTable
+import com.playground.ktor.models.employee.EmployeeTable
 import com.playground.ktor.routes.registerEmployeeRoutes
 import io.ktor.application.*
 import io.ktor.features.ContentNegotiation
@@ -16,18 +16,25 @@ import org.jetbrains.exposed.sql.transactions.transaction
 fun main(args: Array<String>) {
     runBlocking {
         withContext(Dispatchers.IO) {
-            DatabaseSettings.initMySqlDatabase
-            transaction {
-                SchemaUtils.create(EmployeeTable)
-            }
-            println("called")
+            initializeDatabase()
+            initializeTables()
         }
     }
+    initializeEngine(args)
+}
+
+private fun initializeEngine(args: Array<String>) {
     EngineMain.main(args)
 }
 
-fun initEngine() {
+private fun initializeDatabase() {
+    DatabaseSettings.initMySqlDatabase
+}
 
+private fun initializeTables() {
+    transaction {
+        SchemaUtils.create(EmployeeTable)
+    }
 }
 
 @kotlin.jvm.JvmOverloads
@@ -39,9 +46,5 @@ fun Application.module(testing: Boolean = false) {
     registerEmployeeRoutes(dataSource)
 }
 
-private fun initializeTables() {
-    transaction {
-        SchemaUtils.create(EmployeeTable)
-    }
-}
+
 
