@@ -2,10 +2,10 @@ package com.playground.ktor.routes
 
 import com.playground.ktor.data.source.EmployeeDataSource
 import com.playground.ktor.helper.handleEmployee
-import com.playground.ktor.models.employee.CreateEmployeeResponse
+import com.playground.ktor.models.employee.httpResponse.CreateEmployeeResponse
 import com.playground.ktor.models.employee.Employee
-import com.playground.ktor.models.employee.ListEmployeeResponse
-import com.playground.ktor.models.employee.SingleEmployeeResponse
+import com.playground.ktor.models.employee.httpResponse.ListEmployeeResponse
+import com.playground.ktor.models.employee.httpResponse.SingleEmployeeResponse
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -30,7 +30,7 @@ fun Route.listEmployee(dataSource: EmployeeDataSource) {
         val data = dataSource.getAllEmployee()
         val responseMessage = ListEmployeeResponse(
             data = data
-        )
+                                                                                                                      )
         call.respond(
             status = HttpStatusCode.Accepted,
             message = responseMessage
@@ -45,12 +45,12 @@ fun Route.singleEmployee(dataSource: EmployeeDataSource) {
         val responseMessage = if (employee.id != null) {
             SingleEmployeeResponse(
                 data = employee
-            )
+                                                                                                      )
         } else {
             SingleEmployeeResponse(
                 message = "No Employee Found with id $id",
                 data = null
-            )
+                                                                                                      )
         }
         call.respond(
             status = HttpStatusCode.Accepted,
@@ -69,14 +69,15 @@ fun Route.createEmployee(dataSource: EmployeeDataSource) {
                 newEmployee.phone,
                 newEmployee.address)
 
-            val responseMessage = CreateEmployeeResponse(
-                data = Employee(
-                    newEmployeeId,
-                    newEmployee.name,
-                    newEmployee.phone,
-                    newEmployee.address
-                )
-            )
+            val responseMessage =
+                CreateEmployeeResponse(
+                    data = Employee(
+                        newEmployeeId,
+                        newEmployee.name,
+                        newEmployee.phone,
+                        newEmployee.address
+                                   )
+                                                                                                          )
 
             call.respond(
                 status = HttpStatusCode.Accepted,

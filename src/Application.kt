@@ -2,6 +2,7 @@ package com.playground.ktor
 
 import com.playground.ktor.data.source.EmployeeDataSource
 import com.playground.ktor.models.employee.EmployeeTable
+import com.playground.ktor.models.purchase.PurchaseTable
 import com.playground.ktor.routes.registerEmployeeRoutes
 import io.ktor.application.*
 import io.ktor.features.ContentNegotiation
@@ -34,6 +35,7 @@ private fun initializeDatabase() {
 private fun initializeTables() {
     transaction {
         SchemaUtils.create(EmployeeTable)
+        SchemaUtils.create(PurchaseTable)
     }
 }
 

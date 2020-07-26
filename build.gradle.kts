@@ -26,20 +26,21 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlin_serialization_version")
-    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", "$kotlin_version")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-runtime-common", "$kotlin_serialization_version")
+    implementation("org.jetbrains.exposed", "exposed-core", "$exposed_version")
+    implementation("org.jetbrains.exposed", "exposed-dao", "$exposed_version")
+    implementation("org.jetbrains.exposed", "exposed-jdbc", "$exposed_version")
+    implementation("org.jetbrains.exposed", "exposed-java-time", "$exposed_version")
 
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-serialization:$ktor_version")
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    implementation("io.ktor", "ktor-server-netty", "$ktor_version")
+    implementation("io.ktor", "ktor-server-core", "$ktor_version")
+    implementation("io.ktor", "ktor-serialization", "$ktor_version")
+    testImplementation("io.ktor", "ktor-server-tests", "$ktor_version")
 
-    implementation("mysql:mysql-connector-java:$mysql_connector_version")
+    implementation("mysql", "mysql-connector-java", "$mysql_connector_version")
 
-    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("ch.qos.logback", "logback-classic", "$logback_version")
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")

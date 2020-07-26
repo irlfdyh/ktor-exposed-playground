@@ -1,5 +1,6 @@
-package com.playground.ktor.models.employee
+package com.playground.ktor.models.employee.httpResponse
 
+import com.playground.ktor.models.employee.Employee
 import kotlinx.serialization.Serializable
 
 @Serializable
